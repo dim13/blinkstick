@@ -38,6 +38,7 @@ func main() {
 
 	defer blinkstick.Off(dev)
 
+	/* XXX
 	pal := []color.Color{
 		color.YCbCr{0x1f, 0x00, 0xff}, // red
 		color.YCbCr{0x3f, 0x00, 0xbf}, // yellow
@@ -51,5 +52,11 @@ func main() {
 			blinkstick.SetIndex(dev, i, c)
 			time.Sleep(time.Second / 2)
 		}
+	}
+	*/
+	for i := 0; ; i++ {
+		f := newTwiddle(i, color.White)
+		blinkstick.Set(dev, f)
+		time.Sleep(time.Second / 14)
 	}
 }
