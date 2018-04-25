@@ -8,8 +8,8 @@ import (
 	"dim13.org/blinkstick"
 )
 
-func newBinary(n int, c color.Color) blinkstick.Scene {
-	var s blinkstick.Scene
+func newBinary(n int, c color.Color) blinkstick.Frame {
+	var s blinkstick.Frame
 	for i := 0; i < 8; i++ {
 		if n&(1<<uint(i)) != 0 {
 			s[i] = c
@@ -18,8 +18,8 @@ func newBinary(n int, c color.Color) blinkstick.Scene {
 	return s
 }
 
-func newTwiddle(n int, c color.Color) blinkstick.Scene {
-	var s blinkstick.Scene
+func newTwiddle(n int, c color.Color) blinkstick.Frame {
+	var s blinkstick.Frame
 	n %= 14
 	if n < 8 {
 		s[n] = c

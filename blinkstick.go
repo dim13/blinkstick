@@ -18,7 +18,7 @@ import (
    9: LED Frame [Channel, [G, R, B][0..63]]
 */
 
-type Scene [8]color.Color
+type Frame [8]color.Color
 
 func rgb(c color.Color) (uint8, uint8, uint8) {
 	if c == nil {
@@ -35,9 +35,9 @@ func SetIndex(w io.Writer, i int, c color.Color) {
 	io.Copy(w, buf)
 }
 
-func Set(w io.Writer, s Scene) {
+func Set(w io.Writer, frame Frame) {
 	buf := bytes.NewBuffer([]byte{6, 0})
-	for _, c := range s {
+	for _, c := range frame {
 		r, g, b := rgb(c)
 		buf.Write([]byte{g, r, b})
 	}
@@ -45,9 +45,9 @@ func Set(w io.Writer, s Scene) {
 }
 
 func SetAll(w io.Writer, c color.Color) {
-	Set(w, Scene{c, c, c, c, c, c, c, c})
+	Set(w, Frame{c, c, c, c, c, c, c, c})
 }
 
 func Off(w io.Writer) {
-	Set(w, Scene{})
+	Set(w, Frame{})
 }
