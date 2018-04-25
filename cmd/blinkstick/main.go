@@ -2,6 +2,7 @@ package main
 
 import (
 	"image/color"
+	"image/color/palette"
 	"log"
 	"time"
 
@@ -55,7 +56,8 @@ func main() {
 	}
 	*/
 	for i := 0; ; i++ {
-		f := newTwiddle(i, color.White)
+		c := palette.Plan9[i%256]
+		f := newTwiddle(i, c)
 		blinkstick.Set(dev, f)
 		time.Sleep(time.Second / 14)
 	}
