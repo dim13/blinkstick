@@ -1,4 +1,6 @@
-package blinkstick
+// Package blinckstick implements BlinkStick Stripe HID interface
+
+package blinkstick // import "dim13.org/blinkstick"
 
 import (
 	"bytes"
@@ -18,6 +20,7 @@ import (
    9: LED Frame [Channel, [G, R, B][0..63]]
 */
 
+// Frame colors
 type Frame [8]color.Color
 
 func rgb(c color.Color) (uint8, uint8, uint8) {
@@ -28,6 +31,7 @@ func rgb(c color.Color) (uint8, uint8, uint8) {
 	return uint8(r >> 8), uint8(g >> 8), uint8(b >> 8)
 }
 
+// SetIndex sets color by index
 func SetIndex(w io.Writer, i int, c color.Color) {
 	buf := bytes.NewBuffer([]byte{5, 0, byte(i)})
 	r, g, b := rgb(c)
@@ -35,6 +39,7 @@ func SetIndex(w io.Writer, i int, c color.Color) {
 	io.Copy(w, buf)
 }
 
+// Set sets color as frame
 func Set(w io.Writer, frame Frame) {
 	buf := bytes.NewBuffer([]byte{6, 0})
 	for _, c := range frame {
@@ -44,10 +49,12 @@ func Set(w io.Writer, frame Frame) {
 	io.Copy(w, buf)
 }
 
+// SetAll sets all LEDs to same color
 func SetAll(w io.Writer, c color.Color) {
 	Set(w, Frame{c, c, c, c, c, c, c, c})
 }
 
+// Off all LEDs
 func Off(w io.Writer) {
 	Set(w, Frame{})
 }

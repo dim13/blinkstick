@@ -11,6 +11,7 @@ const (
 	productID = 0x41e5
 )
 
+// Errors
 var (
 	ErrUnsupported = errors.New("unsupproted platform")
 	ErrNotFound    = errors.New("device not found")
@@ -27,6 +28,7 @@ var (
    Info Block 2:
 */
 
+// Open blinkstick device
 func Open() (*hid.Device, error) {
 	if !hid.Supported() {
 		return nil, ErrUnsupported

@@ -39,7 +39,6 @@ func main() {
 
 	defer blinkstick.Off(dev)
 
-	/* XXX
 	pal := []color.Color{
 		color.YCbCr{0x1f, 0x00, 0xff}, // red
 		color.YCbCr{0x3f, 0x00, 0xbf}, // yellow
@@ -54,7 +53,7 @@ func main() {
 			time.Sleep(time.Second / 2)
 		}
 	}
-	*/
+
 	for i := 0; ; i++ {
 		c := palette.Plan9[i%256]
 		f := newTwiddle(i, c)
