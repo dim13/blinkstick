@@ -11,7 +11,7 @@
   branch = "master"
   name = "golang.org/x/image"
   packages = ["colornames"]
-  revision = "f315e440302883054d0c2bd85486878cb4f8572c"
+  revision = "e7c2a4f0428ddaa7e8b1d85d3c60810ffc535d84"
 
 [[projects]]
   branch = "master"
@@ -20,7 +20,7 @@
     "html",
     "html/atom"
   ]
-  revision = "5f9ae10d9af5b1c89ae6904293b14b064d4ada23"
+  revision = "32a936f46389aa10549d60bd7833e54b01685d09"
 
 [solve-meta]
   analyzer-name = "dep"
