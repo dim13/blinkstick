@@ -9,8 +9,8 @@ import (
 	"dim13.org/blinkstick"
 )
 
-func newBinary(n int, c color.Color) blinkstick.Frame {
-	var s blinkstick.Frame
+func newBinary(n int, c color.Color) []color.Color {
+	s := make([]color.Color, 8)
 	for i := 0; i < 8; i++ {
 		if n&(1<<uint(i)) != 0 {
 			s[i] = c
@@ -19,8 +19,8 @@ func newBinary(n int, c color.Color) blinkstick.Frame {
 	return s
 }
 
-func newTwiddle(n int, c color.Color) blinkstick.Frame {
-	var s blinkstick.Frame
+func newTwiddle(n int, c color.Color) []color.Color {
+	s := make([]color.Color, 8)
 	n %= 14
 	if n < 8 {
 		s[n] = c
@@ -57,7 +57,7 @@ func main() {
 	for i := 0; ; i++ {
 		c := palette.Plan9[i%256]
 		f := newTwiddle(i, c)
-		blinkstick.Set(dev, f)
+		blinkstick.Set(dev, f...)
 		time.Sleep(time.Second / 14)
 	}
 }

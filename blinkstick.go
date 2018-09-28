@@ -1,9 +1,7 @@
 // Package blinckstick implements BlinkStick Stripe HID interface
-
-package blinkstick // import "dim13.org/blinkstick"
+package blinkstick
 
 import (
-	"bytes"
 	"image/color"
 	"io"
 )
@@ -20,41 +18,51 @@ import (
    9: LED Frame [Channel, [G, R, B][0..63]]
 */
 
-// Frame colors
-type Frame [8]color.Color
-
-func rgb(c color.Color) (uint8, uint8, uint8) {
-	if c == nil {
-		return 0, 0, 0
-	}
-	r, g, b, _ := c.RGBA()
-	return uint8(r >> 8), uint8(g >> 8), uint8(b >> 8)
-}
-
 // SetIndex sets color by index
 func SetIndex(w io.Writer, i int, c color.Color) {
-	buf := bytes.NewBuffer([]byte{5, 0, byte(i)})
-	r, g, b := rgb(c)
-	buf.Write([]byte{r, g, b})
-	io.Copy(w, buf)
-}
-
-// Set sets color as frame
-func Set(w io.Writer, frame Frame) {
-	buf := bytes.NewBuffer([]byte{6, 0})
-	for _, c := range frame {
-		r, g, b := rgb(c)
-		buf.Write([]byte{g, r, b})
+	if c == nil {
+		c = color.Black
 	}
-	io.Copy(w, buf)
+	r, g, b, _ := c.RGBA()
+	w.Write([]byte{5, 0, uint8(i), uint8(r >> 8), uint8(g >> 8), uint8(b >> 8)})
 }
 
-// SetAll sets all LEDs to same color
+func Set(w io.Writer, colors ...color.Color) {
+	var buf []byte
+	switch {
+	case len(colors) <= 8:
+		buf = make([]byte, 3*8+2)
+		buf[0] = 6
+	case len(colors) <= 16:
+		buf = make([]byte, 3*16+2)
+		buf[0] = 7
+	case len(colors) <= 32:
+		buf = make([]byte, 3*32+2)
+		buf[0] = 8
+	case len(colors) <= 64:
+		buf = make([]byte, 3*64+2)
+		buf[0] = 9
+	default:
+		panic("too many colors")
+	}
+	for i, c := range colors {
+		if c == nil {
+			c = color.Black
+		}
+		r, g, b, _ := c.RGBA()
+		buf[3*i+2] = uint8(g >> 8)
+		buf[3*i+3] = uint8(r >> 8)
+		buf[3*i+4] = uint8(b >> 8)
+	}
+	w.Write(buf)
+}
+
+// SetAll sets all (8) LEDs to same color
 func SetAll(w io.Writer, c color.Color) {
-	Set(w, Frame{c, c, c, c, c, c, c, c})
+	Set(w, c, c, c, c, c, c, c, c)
 }
 
 // Off all LEDs
 func Off(w io.Writer) {
-	Set(w, Frame{})
+	SetAll(w, color.Black)
 }
