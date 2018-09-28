@@ -15,7 +15,7 @@ var (
 )
 
 type Progress struct {
-	//f     Frame
+	f     []color.Color
 	start time.Time
 	soft  time.Duration
 	hard  time.Duration
@@ -25,6 +25,7 @@ type Progress struct {
 
 func NewProgress(soft, hard, end time.Duration) Progress {
 	return Progress{
+		f:     make([]color.Color, 8),
 		start: time.Now(),
 		soft:  soft,
 		hard:  hard,
@@ -36,12 +37,12 @@ func (p *Progress) Update(w io.Writer) {
 	done := time.Since(p.start)
 	switch {
 	case p.hard < done:
-		//p.f[p.n] = red
+		p.f[p.n] = red
 	case p.soft < done:
-		//p.f[p.n] = yellow
+		p.f[p.n] = yellow
 	default:
-		//p.f[p.n] = green
+		p.f[p.n] = green
 	}
-	//Set(w, p.f)
+	Set(w, p.f...)
 	p.n = (p.n + 1) % 8
 }
