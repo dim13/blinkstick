@@ -1,16 +1,16 @@
-// +build ignore
-
-package blinkstick
+package main
 
 import (
-	"testing"
+	"log"
 	"time"
+
+	"dim13.org/blinkstick"
 )
 
-func TestProgress(t *testing.T) {
-	dev, err := Open()
+func main() {
+	dev, err := blinkstick.Open()
 	if err != nil {
-		t.Fatal(err)
+		log.Fatal(err)
 	}
 	defer dev.Close()
 
@@ -20,5 +20,5 @@ func TestProgress(t *testing.T) {
 		time.Sleep(time.Second)
 	}
 
-	Off(dev)
+	blinkstick.Off(dev)
 }

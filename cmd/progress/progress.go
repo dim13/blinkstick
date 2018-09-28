@@ -1,9 +1,11 @@
-package blinkstick
+package main
 
 import (
 	"image/color"
 	"io"
 	"time"
+
+	"dim13.org/blinkstick"
 )
 
 var (
@@ -43,6 +45,6 @@ func (p *Progress) Update(w io.Writer) {
 	default:
 		p.f[p.n] = green
 	}
-	Set(w, p.f...)
+	blinkstick.Set(w, p.f...)
 	p.n = (p.n + 1) % 8
 }
