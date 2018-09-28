@@ -35,17 +35,17 @@ func SetIndex(w io.Writer, i int, c color.Color) {
 
 func Set(w io.Writer, colors ...color.Color) error {
 	var buf []byte
-	switch {
-	case len(colors) <= 8:
+	switch l := len(colors); {
+	case l <= 8:
 		buf = make([]byte, 3*8+2)
 		buf[0] = 6
-	case len(colors) <= 16:
+	case l <= 16:
 		buf = make([]byte, 3*16+2)
 		buf[0] = 7
-	case len(colors) <= 32:
+	case l <= 32:
 		buf = make([]byte, 3*32+2)
 		buf[0] = 8
-	case len(colors) <= 64:
+	case l <= 64:
 		buf = make([]byte, 3*64+2)
 		buf[0] = 9
 	default:
