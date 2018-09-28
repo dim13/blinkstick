@@ -2,10 +2,7 @@ package main
 
 import (
 	"image/color"
-	"io"
 	"time"
-
-	"dim13.org/blinkstick"
 )
 
 var (
@@ -35,7 +32,7 @@ func NewProgress(soft, hard, end time.Duration) Progress {
 	}
 }
 
-func (p *Progress) Update(w io.Writer) {
+func (p *Progress) Update() []color.Color {
 	done := time.Since(p.start)
 	switch {
 	case p.hard < done:
@@ -45,6 +42,6 @@ func (p *Progress) Update(w io.Writer) {
 	default:
 		p.f[p.n] = green
 	}
-	blinkstick.Set(w, p.f...)
 	p.n = (p.n + 1) % 8
+	return p.f
 }

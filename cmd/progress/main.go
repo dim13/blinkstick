@@ -16,7 +16,7 @@ func main() {
 
 	p := NewProgress(5*time.Second, 7*time.Second, 8*time.Second)
 	for i := 0; i < 8; i++ {
-		p.Update(dev)
+		blinkstick.Set(dev, p.Update()...)
 		time.Sleep(time.Second)
 	}
 
