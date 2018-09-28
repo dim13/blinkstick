@@ -49,7 +49,7 @@ func Set(w io.Writer, colors ...color.Color) error {
 		buf = make([]byte, 3*64+2)
 		buf[0] = 9
 	default:
-		errors.New("too many colors")
+		return errors.New("too many colors")
 	}
 	for i, c := range colors {
 		r, g, b := rgb(c)
