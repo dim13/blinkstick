@@ -33,6 +33,7 @@ func SetIndex(w io.Writer, i int, c color.Color) {
 	w.Write([]byte{5, 0, uint8(i), r, g, b})
 }
 
+// Set 0 to 64 colors
 func Set(w io.Writer, colors ...color.Color) error {
 	var buf []byte
 	switch l := len(colors); {
@@ -61,7 +62,7 @@ func Set(w io.Writer, colors ...color.Color) error {
 	return err
 }
 
-// SetAll sets all (8) LEDs to same color
+// SetAll sets all 8 LEDs to same color
 func SetAll(w io.Writer, c color.Color) error {
 	return Set(w, c, c, c, c, c, c, c, c)
 }
