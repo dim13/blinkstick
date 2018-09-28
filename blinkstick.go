@@ -2,6 +2,7 @@
 package blinkstick
 
 import (
+	"errors"
 	"image/color"
 	"io"
 )
@@ -18,16 +19,21 @@ import (
    9: LED Frame [Channel, [G, R, B][0..63]]
 */
 
-// SetIndex sets color by index
-func SetIndex(w io.Writer, i int, c color.Color) {
+func rgb(c color.Color) (r, g, b uint8) {
 	if c == nil {
-		c = color.Black
+		return 0, 0, 0
 	}
-	r, g, b, _ := c.RGBA()
-	w.Write([]byte{5, 0, uint8(i), uint8(r >> 8), uint8(g >> 8), uint8(b >> 8)})
+	R, G, B, _ := c.RGBA()
+	return uint8(R >> 8), uint8(G >> 8), uint8(B >> 8)
 }
 
-func Set(w io.Writer, colors ...color.Color) {
+// SetIndex sets color by index
+func SetIndex(w io.Writer, i int, c color.Color) {
+	r, g, b := rgb(c)
+	w.Write([]byte{5, 0, uint8(i), r, g, b})
+}
+
+func Set(w io.Writer, colors ...color.Color) error {
 	var buf []byte
 	switch {
 	case len(colors) <= 8:
@@ -43,26 +49,24 @@ func Set(w io.Writer, colors ...color.Color) {
 		buf = make([]byte, 3*64+2)
 		buf[0] = 9
 	default:
-		panic("too many colors")
+		errors.New("too many colors")
 	}
 	for i, c := range colors {
-		if c == nil {
-			c = color.Black
-		}
-		r, g, b, _ := c.RGBA()
-		buf[3*i+2] = uint8(g >> 8)
-		buf[3*i+3] = uint8(r >> 8)
-		buf[3*i+4] = uint8(b >> 8)
+		r, g, b := rgb(c)
+		buf[3*i+2] = g
+		buf[3*i+3] = r
+		buf[3*i+4] = b
 	}
-	w.Write(buf)
+	_, err := w.Write(buf)
+	return err
 }
 
 // SetAll sets all (8) LEDs to same color
-func SetAll(w io.Writer, c color.Color) {
-	Set(w, c, c, c, c, c, c, c, c)
+func SetAll(w io.Writer, c color.Color) error {
+	return Set(w, c, c, c, c, c, c, c, c)
 }
 
 // Off all LEDs
-func Off(w io.Writer) {
-	SetAll(w, color.Black)
+func Off(w io.Writer) error {
+	return SetAll(w, nil)
 }
