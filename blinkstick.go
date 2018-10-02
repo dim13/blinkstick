@@ -28,9 +28,10 @@ func rgb(c color.Color) (r, g, b uint8) {
 }
 
 // SetIndex sets color by index
-func SetIndex(w io.Writer, i int, c color.Color) {
+func SetIndex(w io.Writer, i int, c color.Color) error {
 	r, g, b := rgb(c)
-	w.Write([]byte{5, 0, uint8(i), r, g, b})
+	_, err := w.Write([]byte{5, 0, uint8(i), r, g, b})
+	return err
 }
 
 // Set 0 to 64 colors
@@ -62,12 +63,22 @@ func Set(w io.Writer, colors ...color.Color) error {
 	return err
 }
 
-// SetAll sets all 8 LEDs to same color
-func SetAll(w io.Writer, c color.Color) error {
-	return Set(w, c, c, c, c, c, c, c, c)
+// SetAll sets all n LEDs to same color
+func SetAll(w io.Writer, n int, c color.Color) error {
+	if n == 0 {
+		n = 8
+	}
+	colors := make([]color.Color, n)
+	for i := 0; i < n; i++ {
+		colors[i] = c
+	}
+	return Set(w, colors...)
 }
 
-// Off all LEDs
-func Off(w io.Writer) error {
-	return SetAll(w, nil)
+// Off all n LEDs
+func Off(w io.Writer, n int) error {
+	if n == 0 {
+		n = 8
+	}
+	return SetAll(w, n, nil)
 }

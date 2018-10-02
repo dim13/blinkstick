@@ -21,5 +21,5 @@ func main() {
 	}
 	defer dev.Close()
 
-	blinkstick.SetAll(dev, c)
+	blinkstick.SetAll(dev, 8, c)
 }

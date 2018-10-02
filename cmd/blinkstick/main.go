@@ -37,7 +37,7 @@ func main() {
 	}
 	defer dev.Close()
 
-	defer blinkstick.Off(dev)
+	defer blinkstick.Off(dev, 8)
 
 	pal := []color.Color{
 		color.YCbCr{0x1f, 0x00, 0xff}, // red

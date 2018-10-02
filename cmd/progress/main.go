@@ -20,5 +20,5 @@ func main() {
 		time.Sleep(time.Second)
 	}
 
-	blinkstick.Off(dev)
+	blinkstick.Off(dev, 8)
 }
