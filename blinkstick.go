@@ -77,8 +77,5 @@ func SetAll(w io.Writer, n int, c color.Color) error {
 
 // Off all n LEDs
 func Off(w io.Writer, n int) error {
-	if n == 0 {
-		n = 8
-	}
 	return SetAll(w, n, nil)
 }
