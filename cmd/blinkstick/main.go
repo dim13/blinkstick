@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"dim13.org/blinkstick"
+	"github.com/dim13/blinkstick"
 )
 
 func newBinary(n int, c color.Color) []color.Color {

@@ -1,6 +1,6 @@
-module dim13.org/blinkstick
+module github.com/dim13/blinkstick
 
 require (
-	github.com/karalabe/hid v0.0.0-20180420081245-2b4488a37358
-	golang.org/x/image v0.0.0-20180708004352-c73c2afc3b81
+	github.com/karalabe/hid v1.0.0
+	golang.org/x/image v0.0.0-20190703141733-d6a02ce849c9
 )

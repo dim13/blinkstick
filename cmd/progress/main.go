@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"dim13.org/blinkstick"
+	"github.com/dim13/blinkstick"
 )
 
 func main() {

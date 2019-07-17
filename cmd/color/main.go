@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	"dim13.org/blinkstick"
+	"github.com/dim13/blinkstick"
 	"golang.org/x/image/colornames"
 )
 
