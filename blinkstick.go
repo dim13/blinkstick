@@ -19,18 +19,10 @@ import (
    9: LED Frame [Channel, [G, R, B][0..63]]
 */
 
-func rgb(c color.Color) (r, g, b uint8) {
-	if c == nil {
-		return 0, 0, 0
-	}
-	R, G, B, _ := c.RGBA()
-	return uint8(R >> 8), uint8(G >> 8), uint8(B >> 8)
-}
-
 // SetIndex sets color by index
 func SetIndex(w io.Writer, i int, c color.Color) error {
-	r, g, b := rgb(c)
-	_, err := w.Write([]byte{5, 0, uint8(i), r, g, b})
+	x := color.RGBAModel.Convert(c).(color.RGBA)
+	_, err := w.Write([]byte{5, 0, uint8(i), x.R, x.G, x.B})
 	return err
 }
 
@@ -54,10 +46,10 @@ func Set(w io.Writer, colors ...color.Color) error {
 		return errors.New("too many colors")
 	}
 	for i, c := range colors {
-		r, g, b := rgb(c)
-		buf[3*i+2] = g
-		buf[3*i+3] = r
-		buf[3*i+4] = b
+		x := color.RGBAModel.Convert(c).(color.RGBA)
+		buf[3*i+2] = x.G
+		buf[3*i+3] = x.R
+		buf[3*i+4] = x.B
 	}
 	_, err := w.Write(buf)
 	return err
@@ -77,5 +69,5 @@ func SetAll(w io.Writer, n int, c color.Color) error {
 
 // Off all n LEDs
 func Off(w io.Writer, n int) error {
-	return SetAll(w, n, nil)
+	return SetAll(w, n, color.Black)
 }
