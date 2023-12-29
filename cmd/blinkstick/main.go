@@ -39,25 +39,8 @@ func main() {
 
 	defer blinkstick.Off(dev, 8)
 
-	pal := []color.Color{
-		color.YCbCr{0x1f, 0x00, 0xff}, // red
-		color.YCbCr{0x3f, 0x00, 0xbf}, // yellow
-		color.YCbCr{0x1f, 0x00, 0x00}, // green
-		color.YCbCr{0x1f, 0xff, 0x1f}, // blue
-		color.Black,                   // off
-	}
-
-	for _, c := range pal {
-		for i := 0; i < 8; i++ {
-			blinkstick.SetIndex(dev, i, c)
-			time.Sleep(time.Second / 2)
-		}
-	}
-
-	for i := 0; ; i++ {
-		c := palette.Plan9[i%256]
-		f := newTwiddle(i, c)
-		blinkstick.Set(dev, f...)
-		time.Sleep(time.Second / 14)
+	for i, c := range palette.Plan9 {
+		blinkstick.Set(dev, newTwiddle(i, c)...)
+		time.Sleep(time.Second / 20)
 	}
 }

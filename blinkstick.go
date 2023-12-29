@@ -46,6 +46,9 @@ func Set(w io.Writer, colors ...color.Color) error {
 		return errors.New("too many colors")
 	}
 	for i, c := range colors {
+		if c == nil {
+			c = color.Black
+		}
 		x := color.RGBAModel.Convert(c).(color.RGBA)
 		buf[3*i+2] = x.G
 		buf[3*i+3] = x.R
