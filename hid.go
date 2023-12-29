@@ -1,21 +1,14 @@
 package blinkstick
 
 import (
-	"errors"
 	"io"
 
-	"github.com/karalabe/hid"
+	"github.com/sstallion/go-hid"
 )
 
 const (
 	vendorID  = 0x20a0
 	productID = 0x41e5
-)
-
-// Errors
-var (
-	ErrUnsupported = errors.New("unsupproted platform")
-	ErrNotFound    = errors.New("device not found")
 )
 
 /* Found device:
@@ -31,11 +24,9 @@ var (
 
 // Open blinkstick device
 func Open() (io.WriteCloser, error) {
-	if !hid.Supported() {
-		return nil, ErrUnsupported
+	// Initialize the hid package.
+	if err := hid.Init(); err != nil {
+		return nil, err
 	}
-	for _, dev := range hid.Enumerate(vendorID, productID) {
-		return dev.Open()
-	}
-	return nil, ErrNotFound
+	return hid.OpenFirst(vendorID, productID)
 }
