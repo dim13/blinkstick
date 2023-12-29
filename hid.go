@@ -2,6 +2,7 @@ package blinkstick
 
 import (
 	"errors"
+	"io"
 
 	"github.com/karalabe/hid"
 )
@@ -29,7 +30,7 @@ var (
 */
 
 // Open blinkstick device
-func Open() (*hid.Device, error) {
+func Open() (io.WriteCloser, error) {
 	if !hid.Supported() {
 		return nil, ErrUnsupported
 	}
